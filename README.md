@@ -34,6 +34,8 @@ npm run report
 
 Screenshots y traces en fallos: carpeta `test-results/`.
 
+Capturas del reporte HTML (para entregar): `docs/capturas/` — generar con `npm run capturas` después de `npm test`.
+
 ## Calidad de código
 
 ```bash
@@ -67,4 +69,10 @@ npm run format:check
 
 ## CI
 
-El workflow corre en push/PR a `main`. Si al hacer `git push` falla por `.github/workflows`, el token necesita permiso **workflow** además de **repo**.
+El archivo está en `.github/workflows/tests.yml`. Para subirlo a GitHub, el token debe tener permisos **repo** y **workflow**:
+
+```powershell
+git add .github
+git commit -m "Agregar CI GitHub Actions"
+git push origin main
+```

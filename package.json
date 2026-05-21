@@ -6,6 +6,7 @@
     "test:x3": "set REPETICIONES=3&& playwright test",
     "test:20": "set REPETICIONES=20&& playwright test",
     "report": "playwright show-report",
+    "capturas": "node scripts/capture-report.mjs",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
