@@ -16,8 +16,9 @@ export class LoginPage {
     await this.page.click('#submit');
   }
 
-  async verifySuccess() {
-    await expect(this.page).toHaveURL(/logged-in-successfully/);
+  async verifySuccess(urlPart = '/logged-in-successfully/') {
+    const path = urlPart.replace(/\//g, '\\/');
+    await expect(this.page).toHaveURL(new RegExp(path));
     await expect(
       this.page.getByText(/Congratulations|successfully logged in/i)
     ).toBeVisible();

@@ -1,78 +1,70 @@
-Automatización de Login – Prueba Técnica
+# Automatización de Login – Prueba Técnica
 
-Este proyecto implementa pruebas automatizadas de UI sobre un formulario de login utilizando Playwright y TypeScript, siguiendo buenas prácticas de automatización y diseño de código.
+Pruebas UI del login con **Playwright** y **TypeScript**.
 
-**Repositorio:** https://github.com/josntinjr/prueba_QA
+**Repositorio:** https://github.com/josntinjr/prueba_QA  
+**Sitio:** https://practicetestautomation.com/practice-test-login/
 
-Sitio bajo prueba:
-https://practicetestautomation.com/practice-test-login/
+## Requisitos
 
-¿Qué incluye este proyecto?
-
-Se automatizan los 3 escenarios solicitados:
-- Login exitoso
-- Usuario inválido
-- Password inválido
-
-Tecnologías utilizadas:
-- Playwright
-- TypeScript
-- Node.js
-
-Requisitos:
-- Node.js 18 o superior
+- Node.js 18+
 - npm
 
-Instalación:
+## Instalación
+
+```bash
 npm install
 npx playwright install chromium
+```
 
-Ejecución de pruebas:
+## Ejecutar tests
+
+```bash
 npm test
+```
 
-Ejecuciones adicionales:
-npm run test:x3
-npm run test:20
+Incluye 3 casos UI del PDF + 4 tests de `login_rules`.  
+Opcional: `npm run test:x3` (9 UI) o `npm run test:20` (60 UI).
 
-Reporte:
+## Reporte HTML
+
+```bash
 npm run report
+```
 
-En caso de fallos, se generan screenshots y traces en:
-test-results/
+Screenshots y traces en fallos: carpeta `test-results/`.
 
-Casos automatizados:
+## Calidad de código
 
-1. Login exitoso
-   Usuario: student
-   Password: Password123
-   Validaciones: URL, mensaje y botón Log out
+```bash
+npm run lint
+npm run format:check
+```
 
-2. Usuario inválido
-   Usuario: incorrectUser
-   Password: Password123
-   Validación: Your username is invalid!
+## Casos automatizados (PDF)
 
-3. Password inválido
-   Usuario: student
-   Password: incorrectPassword
-   Validación: Your password is invalid!
+| Caso | Usuario | Password | Validación |
+|------|---------|----------|------------|
+| 1 Positivo | student | Password123 | URL éxito, mensaje, Log out |
+| 2 Usuario inválido | incorrectUser | Password123 | Your username is invalid! |
+| 3 Password inválido | student | incorrectPassword | Your password is invalid! |
 
-Estructura del proyecto:
+## Estructura
 
-pages/     → Page Object Model
-rules/     → lógica programable
-tests/     → casos de prueba
+- `pages/LoginPage.ts` – Page Object Model
+- `rules/login_rules.ts` – Opción A: `getLoginExpectation()` → `{ shouldSucceed, expectedUrlContains, expectedMessage }`
+- `tests/login.spec.ts` – 3 casos UI (usan `login_rules` en todos)
+- `tests/login_rules.spec.ts` – tests de la lógica (vacías, válidas, errores)
+- `.github/workflows/tests.yml` – CI en GitHub Actions
 
-Credenciales válidas:
-Usuario: student
-Password: Password123
+## Decisiones técnicas
 
-Decisiones técnicas:
-- Uso de URL directa al login
-- Selectores por id
-- Sin uso de sleeps
-- Uso de auto-wait de Playwright
-- Implementación de lógica reusable (login_rules)
+- URL directa al login (no el home del sitio).
+- Selectores por `id` y `role` para Log out.
+- Sin `sleep`; esperas de Playwright y `expect`.
+- Todos los flujos UI leen expectativas desde `login_rules`.
+- Credencial válida: **`student`** (no `estudiante`).
 
-Enfoque:
-El objetivo fue mantener código limpio, reutilizable y estable, aplicando buenas prácticas de automatización.
+## CI
+
+El workflow corre en push/PR a `main`. Si al hacer `git push` falla por `.github/workflows`, el token necesita permiso **workflow** además de **repo**.
