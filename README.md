@@ -1,68 +1,103 @@
-# Prueba técnica – Login automatizado
+# Prueba técnica – Login (Cypress + TypeScript)
 
-Automatización del formulario de login de [Practice Test Automation](https://practicetestautomation.com/practice-test-login/) con Playwright y TypeScript.
+Automatización UI para [Practice Test Login](https://practicetestautomation.com/practice-test-login/), según el PDF de la prueba técnica.
 
-Repo: https://github.com/josntinjr/prueba_QA
+**Repositorio:** https://github.com/josntinjr/prueba_QA
 
-## Qué necesitás
+## Requisitos
 
-- Node 18 o más
-- npm
+- **Node.js** 18+ (recomendado 20 LTS)
+- **npm** 9+
 
-## Cómo lo corro en mi máquina
+## Instalación
 
 ```bash
 npm install
-npx playwright install chromium
-npm test
 ```
 
-Eso ejecuta los 3 casos del enunciado (login ok, usuario mal, password mal) y unos tests chicos de `login_rules`.
-
-Si querés repetir los casos varias veces:
+## Ejecución local
 
 ```bash
-npm run test:x3    # 3 veces cada uno
-npm run test:20    # 20 veces (tarda)
+# Todos los tests (3 UI data-driven + 4 reglas)
+npm test
+
+# Interfaz gráfica de Cypress
+npm run test:open
 ```
 
-## Ver el reporte
+## Reporte HTML
+
+Tras `npm test` se genera el reporte Mochawesome en `cypress/reports/index.html`:
 
 ```bash
 npm run report
 ```
 
-Si algo falla, mirá `test-results/` (screenshots y trace).
+Levanta el servidor en **http://localhost:9333** y abre el navegador. Deja esa terminal abierta (Ctrl+C para cerrar).
 
-Capturas listas para adjuntar en la entrega: `docs/capturas/`.  
-Para regenerarlas: `npm test` y después `npm run capturas`.
+> Si `localhost:9323` da 404, es un servidor viejo (p. ej. Playwright). Cierra esa terminal o usa el puerto **9333** de este proyecto.
 
-## Los 3 casos segun ek docunmeto
+Solo abrir el archivo HTML sin servidor:
 
-1. **Login correcto** – `student` / `Password123` → redirige, mensaje de éxito y botón Log out.
-2. **Usuario mal** – `incorrectUser` → `Your username is invalid!`
-3. **Password mal** – `incorrectPassword` → `Your password is invalid!`
+```bash
+npm run report:file
+```
 
-> En la página a veces dice `estudiante` en el paso 2, pero el usuario que funciona es **`student`** (inglés). Si probás con `estudiante` te tira error.
+## Casos obligatorios (PDF)
 
-## Cómo está armado el proyecto
+| Caso              | Usuario         | Password            | Verificación                                                          |
+| ----------------- | --------------- | ------------------- | --------------------------------------------------------------------- |
+| Login positivo    | `student`       | `Password123`       | URL `/logged-in-successfully/`, mensaje de éxito, **Log out** visible |
+| Usuario inválido  | `incorrectUser` | `Password123`       | `#error` visible, `Your username is invalid!`                         |
+| Password inválido | `student`       | `incorrectPassword` | `#error` visible, `Your password is invalid!`                         |
 
-- `pages/LoginPage.ts` – abre la página, hace login y valida
-- `rules/login_rules.ts` – según user/pass devuelve qué debería pasar (requisito de la prueba)
-- `tests/login.spec.ts` – los 3 tests de UI
-- `tests/login_rules.spec.ts` – pruebas de la función de reglas
+El usuario válido del sitio es **`student`** (no `estudiante`).
 
-Uso `#username`, `#password`, `#submit` y `#error` porque son estables. No puse `sleep`; Playwright espera solo.
+## Estructura
 
-En `open()` voy directo a la URL del login. Si usás `goto('/')` con el baseURL te manda al home y los tests no encuentran el formulario.
+```
+cypress/
+  e2e/login.cy.ts         → 3 casos UI (data-driven con LOGIN_SCENARIOS)
+  e2e/login_rules.cy.ts   → tests de getLoginExpectation (edge cases)
+  pages/LoginPage.ts        → Page Object Model
+  support/e2e.ts            → reporter HTML
+rules/login_rules.ts        → pieza programable (Opción A del PDF)
+cypress.config.ts
+.github/workflows/ci.yml    → CI en push/PR
+```
 
-## Lint (opcional)
+## Decisiones técnicas
+
+- **Framework:** Cypress por API simple, auto-wait y reporte Mochawesome integrable.
+- **POM:** `LoginPage` encapsula navegación, acciones y aserciones (`open`, `login`, `verifySuccess`, `verifyError`).
+- **Pieza programable (Opción A):** `getLoginExpectation(username, password)` devuelve `{ shouldSucceed, expectedUrlContains, expectedMessage }`. Los tests UI recorren `LOGIN_SCENARIOS` (data-driven).
+- **Selectores:** IDs estables (`#username`, `#password`, `#submit`, `#error`) y enlace `Log out`.
+- **Esperas:** Sin `sleep`; `should()` y comandos Cypress con reintentos implícitos. `pageLoadTimeout` 90s y 1 retry en CI/local por sitio externo lento.
+- **Navegación:** `baseUrl` apunta a la ruta de login; `cy.visit('/')` abre esa página (no el home del dominio).
+
+## Calidad de código
 
 ```bash
 npm run lint
 npm run format:check
 ```
 
+## Supuestos
+
+- El sitio mantiene textos de error y la ruta de éxito documentados en la prueba.
+- Los tests corren contra el entorno público (sin credenciales en variables de entorno).
+- Fallos intermitentes por latencia del sitio se mitigan con timeout y reintentos, no con sleeps fijos.
+
+## Evidencias (capturas)
+
+Tras ejecutar los tests, genera screenshots del reporte HTML en `docs/capturas/`:
+
+```bash
+npm run capturas
+```
+
+Archivos: resumen del reporte, lista de tests passed y detalle del caso *login correcto*.
+
 ## CI
 
-Dejé el workflow en `.github/workflows/tests.yml` pero no lo subí al repo porque mi token no tenía permiso `workflow`.
+CI: plantilla en `docs/ci-workflow.yml.example` (copiar a `.github/workflows/ci.yml`; el push del workflow requiere token con scope `workflow`).

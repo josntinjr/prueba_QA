@@ -2,21 +2,23 @@
   "name": "qa-automation-login",
   "version": "1.0.0",
   "scripts": {
-    "test": "playwright test",
-    "test:x3": "set REPETICIONES=3&& playwright test",
-    "test:20": "set REPETICIONES=20&& playwright test",
-    "report": "playwright show-report",
-    "capturas": "node scripts/capture-report.mjs",
+    "test": "cypress run",
+    "test:open": "cypress open",
+    "report": "node scripts/serve-report.mjs",
+    "report:file": "node scripts/open-report.mjs",
+    "capturas": "npm test && node scripts/capture-report.mjs",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
   "devDependencies": {
     "@eslint/js": "^9.28.0",
-    "@playwright/test": "^1.54.0",
     "@types/node": "^22.15.0",
+    "cypress": "^14.3.3",
+    "cypress-mochawesome-reporter": "^3.8.2",
     "eslint": "^9.28.0",
     "prettier": "^3.5.3",
+    "puppeteer": "^24.43.1",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.33.0"
   }

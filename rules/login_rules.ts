@@ -4,13 +4,30 @@ export type LoginExpectation = {
   expectedMessage: string;
 };
 
-// Opcion A del PDF: resultado esperado segun credenciales
+export const LOGIN_SCENARIOS = [
+  {
+    name: 'login correcto',
+    username: 'student',
+    password: 'Password123',
+  },
+  {
+    name: 'usuario incorrecto',
+    username: 'incorrectUser',
+    password: 'Password123',
+  },
+  {
+    name: 'password incorrecto',
+    username: 'student',
+    password: 'incorrectPassword',
+  },
+] as const;
+
 export function getLoginExpectation(
   username: string,
   password: string
 ): LoginExpectation {
-  const user = username?.trim() ?? '';
-  const pass = password?.trim() ?? '';
+  const user = username.trim();
+  const pass = password.trim();
 
   if (!user || !pass) {
     return {
