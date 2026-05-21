@@ -2,7 +2,7 @@ import { test } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
 import { getLoginExpectation } from '../rules/login_rules';
 
-// Por defecto 1 (3 tests del PDF). Usar npm run test:x3 o test:20 para más repeticiones.
+// Usar npm run test:x3 
 const REPETICIONES = Number(process.env.REPETICIONES) || 1;
 
 for (let i = 1; i <= REPETICIONES; i++) {
