@@ -1,78 +1,68 @@
-# Automatización de Login – Prueba Técnica
+# Prueba técnica – Login automatizado
 
-Pruebas UI del login con **Playwright** y **TypeScript**.
+Automatización del formulario de login de [Practice Test Automation](https://practicetestautomation.com/practice-test-login/) con Playwright y TypeScript.
 
-**Repositorio:** https://github.com/josntinjr/prueba_QA  
-**Sitio:** https://practicetestautomation.com/practice-test-login/
+Repo: https://github.com/josntinjr/prueba_QA
 
-## Requisitos
+## Qué necesitás
 
-- Node.js 18+
+- Node 18 o más
 - npm
 
-## Instalación
+## Cómo lo corro en mi máquina
 
 ```bash
 npm install
 npx playwright install chromium
-```
-
-## Ejecutar tests
-
-```bash
 npm test
 ```
 
-Incluye 3 casos UI del PDF + 4 tests de `login_rules`.  
-Opcional: `npm run test:x3` (9 UI) o `npm run test:20` (60 UI).
+Eso ejecuta los 3 casos del enunciado (login ok, usuario mal, password mal) y unos tests chicos de `login_rules`.
 
-## Reporte HTML
+Si querés repetir los casos varias veces:
+
+```bash
+npm run test:x3    # 3 veces cada uno
+npm run test:20    # 20 veces (tarda)
+```
+
+## Ver el reporte
 
 ```bash
 npm run report
 ```
 
-Screenshots y traces en fallos: carpeta `test-results/`.
+Si algo falla, mirá `test-results/` (screenshots y trace).
 
-Capturas del reporte HTML (para entregar): `docs/capturas/` — generar con `npm run capturas` después de `npm test`.
+Capturas listas para adjuntar en la entrega: `docs/capturas/`.  
+Para regenerarlas: `npm test` y después `npm run capturas`.
 
-## Calidad de código
+## Los 3 casos del PDF
+
+1. **Login correcto** – `student` / `Password123` → redirige, mensaje de éxito y botón Log out.
+2. **Usuario mal** – `incorrectUser` → `Your username is invalid!`
+3. **Password mal** – `incorrectPassword` → `Your password is invalid!`
+
+> En la página a veces dice `estudiante` en el paso 2, pero el usuario que funciona es **`student`** (inglés). Si probás con `estudiante` te tira error.
+
+## Cómo está armado el proyecto
+
+- `pages/LoginPage.ts` – abre la página, hace login y valida
+- `rules/login_rules.ts` – según user/pass devuelve qué debería pasar (requisito de la prueba)
+- `tests/login.spec.ts` – los 3 tests de UI
+- `tests/login_rules.spec.ts` – pruebas de la función de reglas
+
+Uso `#username`, `#password`, `#submit` y `#error` porque son estables. No puse `sleep`; Playwright espera solo.
+
+En `open()` voy directo a la URL del login. Si usás `goto('/')` con el baseURL te manda al home y los tests no encuentran el formulario.
+
+## Lint (opcional)
 
 ```bash
 npm run lint
 npm run format:check
 ```
 
-## Casos automatizados (PDF)
-
-| Caso                | Usuario       | Password          | Validación                  |
-| ------------------- | ------------- | ----------------- | --------------------------- |
-| 1 Positivo          | student       | Password123       | URL éxito, mensaje, Log out |
-| 2 Usuario inválido  | incorrectUser | Password123       | Your username is invalid!   |
-| 3 Password inválido | student       | incorrectPassword | Your password is invalid!   |
-
-## Estructura
-
-- `pages/LoginPage.ts` – Page Object Model
-- `rules/login_rules.ts` – Opción A: `getLoginExpectation()` → `{ shouldSucceed, expectedUrlContains, expectedMessage }`
-- `tests/login.spec.ts` – 3 casos UI (usan `login_rules` en todos)
-- `tests/login_rules.spec.ts` – tests de la lógica (vacías, válidas, errores)
-- `.github/workflows/tests.yml` – CI en GitHub Actions
-
-## Decisiones técnicas
-
-- URL directa al login (no el home del sitio).
-- Selectores por `id` y `role` para Log out.
-- Sin `sleep`; esperas de Playwright y `expect`.
-- Todos los flujos UI leen expectativas desde `login_rules`.
-- Credencial válida: **`student`** (no `estudiante`).
-
 ## CI
 
-El archivo está en `.github/workflows/tests.yml`. Para subirlo a GitHub, el token debe tener permisos **repo** y **workflow**:
-
-```powershell
-git add .github
-git commit -m "Agregar CI GitHub Actions"
-git push origin main
-```
+Dejé el workflow en `.github/workflows/tests.yml` pero no lo subí al repo porque mi token no tenía permiso `workflow`. Si lo necesitás, agregalo con un PAT que tenga `repo` + `workflow`.
