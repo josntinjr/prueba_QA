@@ -1,70 +1,78 @@
-# Automatización login – Prueba técnica
+Automatización de Login – Prueba Técnica
 
-Tests UI del formulario de login con **Playwright** y **TypeScript**.
+Este proyecto implementa pruebas automatizadas de UI sobre un formulario de login utilizando Playwright y TypeScript, siguiendo buenas prácticas de automatización y diseño de código.
 
-**Sitio:** https://practicetestautomation.com/practice-test-login/
+**Repositorio:** https://github.com/josntinjr/prueba_QA
 
-## Requisitos
+Sitio bajo prueba:
+https://practicetestautomation.com/practice-test-login/
 
+¿Qué incluye este proyecto?
+
+Se automatizan los 3 escenarios solicitados:
+- Login exitoso
+- Usuario inválido
+- Password inválido
+
+Tecnologías utilizadas:
+- Playwright
+- TypeScript
+- Node.js
+
+Requisitos:
 - Node.js 18 o superior
 - npm
 
-## Instalación
-
-```bash
+Instalación:
 npm install
 npx playwright install chromium
-```
 
-## Ejecutar tests
-
-```bash
+Ejecución de pruebas:
 npm test
-```
 
-Una pasada de cada caso del PDF (3 tests).
+Ejecuciones adicionales:
+npm run test:x3
+npm run test:20
 
-```bash
-npm run test:x3    # 3 veces cada caso (9 tests)
-npm run test:20    # 20 veces cada caso (60 tests, tarda varios minutos)
-```
-
-## Ver reporte HTML
-
-Después de correr los tests:
-
-```bash
+Reporte:
 npm run report
-```
 
-Si un test falla, Playwright guarda screenshot y trace en `test-results/`.
+En caso de fallos, se generan screenshots y traces en:
+test-results/
 
-## Casos automatizados
+Casos automatizados:
 
-| Caso | Usuario | Password | Validación |
-|------|---------|----------|------------|
-| 1 – Positivo | student | Password123 | URL de éxito, mensaje, Log out |
-| 2 – Usuario inválido | incorrectUser | Password123 | Your username is invalid! |
-| 3 – Password inválido | student | incorrectPassword | Your password is invalid! |
+1. Login exitoso
+   Usuario: student
+   Password: Password123
+   Validaciones: URL, mensaje y botón Log out
 
-## Estructura
+2. Usuario inválido
+   Usuario: incorrectUser
+   Password: Password123
+   Validación: Your username is invalid!
 
-- `pages/LoginPage.ts` – Page Object (acciones y aserciones)
-- `rules/login_rules.ts` – pieza programable: mensaje/éxito según credenciales
-- `tests/login.spec.ts` – los 3 casos del PDF
+3. Password inválido
+   Usuario: student
+   Password: incorrectPassword
+   Validación: Your password is invalid!
 
-## Credenciales correctas (caso 1)
+Estructura del proyecto:
 
-En la página a veces el paso 2 del recuadro dice `estudiante`, pero las credenciales válidas del sitio y del PDF son en **inglés**:
+pages/     → Page Object Model
+rules/     → lógica programable
+tests/     → casos de prueba
 
-- Usuario: **`student`** (no `estudiante`)
-- Password: **`Password123`**
+Credenciales válidas:
+Usuario: student
+Password: Password123
 
-Si escribís `estudiante`, el sitio muestra *"Your username is invalid!"* — es el comportamiento esperado de un login fallido, no del caso positivo.
+Decisiones técnicas:
+- Uso de URL directa al login
+- Selectores por id
+- Sin uso de sleeps
+- Uso de auto-wait de Playwright
+- Implementación de lógica reusable (login_rules)
 
-## Decisiones técnicas
-
-- **URL directa** al login en `LoginPage.open()` para no abrir el home del sitio por error.
-- **Selectores por id** (`#username`, `#password`, `#submit`, `#error`) y rol para Log out.
-- **Sin `sleep`**: se usan las esperas automáticas de Playwright y `expect`.
-- **`login_rules`**: centraliza el mensaje esperado en casos negativos (requisito Opción A).
+Enfoque:
+El objetivo fue mantener código limpio, reutilizable y estable, aplicando buenas prácticas de automatización.
