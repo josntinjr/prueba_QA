@@ -33,9 +33,7 @@ Tras `npm test` se genera el reporte Mochawesome en `cypress/reports/index.html`
 npm run report
 ```
 
-Levanta el servidor en **http://127.0.0.1:9333/** y abre el navegador (puerto **9333**, no 9323). Deja esa terminal abierta (Ctrl+C para cerrar).
-
-> **9323** era el puerto por defecto de Playwright; si ves 404 ahí, cierra ese proceso y usa `npm run report` (9333).
+Levanta el servidor en **http://127.0.0.1:9333/** (puerto **9333**). Deja esa terminal abierta (Ctrl+C para cerrar).
 
 Solo abrir el archivo HTML sin servidor:
 
