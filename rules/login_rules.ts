@@ -1,4 +1,4 @@
-// Devuelve qué debería pasar según usuario y contraseña (requisito de la prueba)
+// Opcion A del enunciado: que resultado esperar segun credenciales
 export function getLoginExpectation(username: string, password: string) {
   if (username === 'student' && password === 'Password123') {
     return {

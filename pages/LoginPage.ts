@@ -1,10 +1,13 @@
 import { expect, Page } from '@playwright/test';
 
+const LOGIN_URL = 'https://practicetestautomation.com/practice-test-login/';
+
 export class LoginPage {
   constructor(private page: Page) {}
 
   async open() {
-    await this.page.goto('.', { waitUntil: 'domcontentloaded' });
+    await this.page.goto(LOGIN_URL, { waitUntil: 'domcontentloaded' });
+    await expect(this.page.locator('#username')).toBeVisible();
   }
 
   async login(user: string, pass: string) {
@@ -15,12 +18,14 @@ export class LoginPage {
 
   async verifySuccess() {
     await expect(this.page).toHaveURL(/logged-in-successfully/);
-    await expect(this.page.getByText(/Congratulations|successfully logged in/i)).toBeVisible();
+    await expect(
+      this.page.getByText(/Congratulations|successfully logged in/i)
+    ).toBeVisible();
     await expect(this.page.getByRole('link', { name: 'Log out' })).toBeVisible();
   }
 
-  async verifyError(text: string) {
+  async verifyError(message: string) {
     await expect(this.page.locator('#error')).toBeVisible();
-    await expect(this.page.locator('#error')).toHaveText(text);
+    await expect(this.page.locator('#error')).toHaveText(message);
   }
 }
