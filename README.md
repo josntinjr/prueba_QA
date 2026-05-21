@@ -33,9 +33,9 @@ Tras `npm test` se genera el reporte Mochawesome en `cypress/reports/index.html`
 npm run report
 ```
 
-Levanta el servidor en **http://localhost:9333** y abre el navegador. Deja esa terminal abierta (Ctrl+C para cerrar).
+Levanta el servidor en **http://127.0.0.1:9333/** y abre el navegador (puerto **9333**, no 9323). Deja esa terminal abierta (Ctrl+C para cerrar).
 
-> Si `localhost:9323` da 404, es un servidor viejo (p. ej. Playwright). Cierra esa terminal o usa el puerto **9333** de este proyecto.
+> **9323** era el puerto por defecto de Playwright; si ves 404 ahí, cierra ese proceso y usa `npm run report` (9333).
 
 Solo abrir el archivo HTML sin servidor:
 
@@ -63,7 +63,8 @@ cypress/
   support/e2e.ts            → reporter HTML
 rules/login_rules.ts        → pieza programable (Opción A del PDF)
 cypress.config.ts
-.github/workflows/ci.yml    → CI en push/PR
+docs/ci-workflow.yml.example → plantilla CI (GitHub Actions)
+docs/capturas/               → evidencias del reporte
 ```
 
 ## Decisiones técnicas
