@@ -37,7 +37,7 @@ Si algo falla, mirá `test-results/` (screenshots y trace).
 Capturas listas para adjuntar en la entrega: `docs/capturas/`.  
 Para regenerarlas: `npm test` y después `npm run capturas`.
 
-## Los 3 casos del PDF
+## Los 3 casos segun ek docunmeto
 
 1. **Login correcto** – `student` / `Password123` → redirige, mensaje de éxito y botón Log out.
 2. **Usuario mal** – `incorrectUser` → `Your username is invalid!`
