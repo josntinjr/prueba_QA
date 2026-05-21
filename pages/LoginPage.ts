@@ -22,7 +22,9 @@ export class LoginPage {
     await expect(
       this.page.getByText(/Congratulations|successfully logged in/i)
     ).toBeVisible();
-    await expect(this.page.getByRole('link', { name: 'Log out' })).toBeVisible();
+    await expect(
+      this.page.getByRole('link', { name: 'Log out' })
+    ).toBeVisible();
   }
 
   async verifyError(message: string) {

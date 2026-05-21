@@ -43,11 +43,11 @@ npm run format:check
 
 ## Casos automatizados (PDF)
 
-| Caso | Usuario | Password | Validación |
-|------|---------|----------|------------|
-| 1 Positivo | student | Password123 | URL éxito, mensaje, Log out |
-| 2 Usuario inválido | incorrectUser | Password123 | Your username is invalid! |
-| 3 Password inválido | student | incorrectPassword | Your password is invalid! |
+| Caso                | Usuario       | Password          | Validación                  |
+| ------------------- | ------------- | ----------------- | --------------------------- |
+| 1 Positivo          | student       | Password123       | URL éxito, mensaje, Log out |
+| 2 Usuario inválido  | incorrectUser | Password123       | Your username is invalid!   |
+| 3 Password inválido | student       | incorrectPassword | Your password is invalid!   |
 
 ## Estructura
 
