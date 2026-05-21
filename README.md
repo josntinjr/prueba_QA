@@ -65,4 +65,4 @@ npm run format:check
 
 ## CI
 
-Dejé el workflow en `.github/workflows/tests.yml` pero no lo subí al repo porque mi token no tenía permiso `workflow`. Si lo necesitás, agregalo con un PAT que tenga `repo` + `workflow`.
+Dejé el workflow en `.github/workflows/tests.yml` pero no lo subí al repo porque mi token no tenía permiso `workflow`.
